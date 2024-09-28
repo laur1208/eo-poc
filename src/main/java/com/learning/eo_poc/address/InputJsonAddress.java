@@ -1,15 +1,20 @@
 package com.learning.eo_poc.address;
 
-import javax.json.JsonObject;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-final class InputJsonAddress extends JsonResource implements Address {
-    InputJsonAddress(JsonObject address) {
-        super(address);
+import javax.json.Json;
+import javax.json.JsonObject;
+import java.io.StringReader;
+
+@JsonDeserialize(using = InputAddressDeserializer.class)
+final class InputJsonAddress extends JsonResource implements AddressInput {
+
+    InputJsonAddress(String json) {
+        this(Json.createReader(new StringReader(json)).readObject());
     }
 
-    @Override
-    public String id() {
-        return this.getString("id");
+    InputJsonAddress(JsonObject address) {
+        super(address);
     }
 
     @Override
